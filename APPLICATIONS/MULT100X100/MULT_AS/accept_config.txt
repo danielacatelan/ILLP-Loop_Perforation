@@ -1,0 +1,7 @@
+0 loop at mult.c:105
+0 loop at mult.c:106
+0 loop at mult.c:114
+0 loop at mult.c:115
+8 loop at mult.c:124
+0 loop at mult.c:126
+0 loop at mult.c:129

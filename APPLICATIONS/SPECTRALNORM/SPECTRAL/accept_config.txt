@@ -1,0 +1,7 @@
+0 loop at spectralnorm.c:17
+0 loop at spectralnorm.c:20
+8 loop at spectralnorm.c:27
+0 loop at spectralnorm.c:30
+0 loop at spectralnorm.c:47
+0 loop at spectralnorm.c:51
+0 loop at spectralnorm.c:57

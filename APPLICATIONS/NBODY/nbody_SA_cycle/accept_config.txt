@@ -1,0 +1,7 @@
+8 loop at nbody.c:148
+0 loop at nbody.c:34
+0 loop at nbody.c:36
+0 loop at nbody.c:51
+0 loop at nbody.c:65
+0 loop at nbody.c:68
+0 loop at nbody.c:84

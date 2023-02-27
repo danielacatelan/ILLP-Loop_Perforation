@@ -1,0 +1,9 @@
+mean
+0
+0
+
+covariance
+0
+0
+0
+
