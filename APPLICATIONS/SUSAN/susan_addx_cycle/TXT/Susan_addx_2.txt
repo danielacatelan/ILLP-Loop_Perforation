@@ -1,0 +1,7 @@
+bbl loader
+
+Entra no loop = 125
+begin: 8786989
+end 22690967
+Total Cycle: 13903978
+Number Corner = 1811
