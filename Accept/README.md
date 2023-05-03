@@ -1,3 +1,6 @@
+somadores.h é onde fica todas as funções somadores para substituir no loop
+script.py lê accept_config.txt e baseado nele cria um novo .c, onde os loops escolhidos tera seu incremento modificado para o somador escolhido
+
 - somadores.h vai na pasta: accept/include/
 - script.py fica na pasta do accept: accept/
 - O Makefile fica junto com o .c que vai ser perfurado
