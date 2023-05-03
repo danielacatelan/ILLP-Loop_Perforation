@@ -3,7 +3,7 @@ accept.h:
 Foi adicionado uma nova variavel para guardar o valor da escolha da perfuração:
 Linha 173:   std::map<std::string, int> doIt;
 
-
+ 
 loopperf.cpp
 
 Foi modificado a instrução que decide qual loop sera perfurado considerando o parametro, para tambem considerar o valor de escolha da perfuração.
