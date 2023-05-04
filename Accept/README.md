@@ -8,4 +8,4 @@ script.py lê accept_config.txt e baseado nele cria um novo .c, onde os loops es
 
 O makefile tem 4 regras além das padrões do accept: construir_addx, construir_accept, construir_accept_spike e limpar
 
-Para usar de o camando: make REGRA;     - substituindo REGRA, por uma das 3 regras
+Para usar o make, execute o seguinte comando: make REGRA;     - substituindo REGRA, por uma das 3 regras
