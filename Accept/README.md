@@ -1,3 +1,4 @@
+Pass é onde fica os arquivos modificados do accept
 somadores.h é onde fica todas as funções somadores para substituir no loop
 script.py lê accept_config.txt e baseado nele cria um novo .c, onde os loops escolhidos tera seu incremento modificado para o somador escolhido
 
