@@ -17,3 +17,6 @@ Linha 158:   configFile << i->second << " " << "1" << " " << i->first << "\n";
 Linha 179:   configFile >> var;
 Linha 180:   configFile.ignore();
 Linha 183:   doIt[ident] = var;
+
+Após modificar esse arquivos, vá até a pasta do accept: accept/ e executa o seguinte comando:
+    sudo make accept
