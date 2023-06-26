@@ -1,13 +1,15 @@
-/**
- *
- * Author     : Adrian Statescu mergesortv@gmail.com http://adrianstatescu.com
- * https://gist.github.com/thinkphp/0d56dfd5eb5f91da029a91d4c7676f12
- * Description: C Program to compute PI using a Monte Carlo Method.
- *
- * MIT License 
- *
- */
-//#include <enerc.h>
+/*##################################################
+****************************************
+Application: PI
+****************************************
+Technique: AS - ACCEPT-SPIKEX
+*****************************************
+Date: 06/26/2023
+Author: Daniela L. Catelan
+UFMS - PhD in Computer Science
+####################################################*/
+
+#include <enerc.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -21,11 +23,9 @@ int main()
  int i, count, n=3000;
  double x,y,z,pi;
 
- //scanf("%d", &n);
-
  count = 0;
 
- for(i = 0; i < n; i++) 
+ for(i = 0; i < n; i++) //Loop Perforation
  {
      x = (double)rand() / RAND_MAX;
      y = (double)rand() / RAND_MAX;
@@ -34,11 +34,11 @@ int main()
      {
        count++;
      }
-     
+
  }//close for
 
  pi = (double) count / n * 4;
- printf("\n-> pi=%.5g", pi);
+ printf("\n-> pi = %.5g", pi);
 
  return(0);
 }

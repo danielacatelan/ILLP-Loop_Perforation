@@ -1,0 +1,6 @@
+0 loop at fannkuch-redux.c:22
+0 loop at fannkuch-redux.c:27
+0 loop at fannkuch-redux.c:32
+0 loop at fannkuch-redux.c:37
+8 loop at fannkuch-redux.c:39
+0 loop at fannkuch-redux.c:58

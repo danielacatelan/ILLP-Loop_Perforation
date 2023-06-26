@@ -1,13 +1,14 @@
-/**
- *
- * Author     : Adrian Statescu mergesortv@gmail.com http://adrianstatescu.com
- *
- * Description: C Program to compute PI using a Monte Carlo Method.
- *
- * MIT License 
- *
- */
-//#include <enerc.h>
+/*##################################################
+****************************************
+Application: PI
+****************************************
+Technique: ILLP - Instruction-Level Loop Perforation
+*****************************************
+Date: 06/26/2023
+Author: Daniela L. Catelan
+UFMS - PhD in Computer Science
+####################################################*/
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -22,8 +23,6 @@ int main()
  srand( SEED );
  int i, count, n=3000;
  double x,y,z,pi;
-
- //scanf("%d", &n);
 
  count = 0;
  //Definição de variaveis
@@ -42,7 +41,7 @@ int main()
      {
        count++;
      }
-	
+
  }//close for
 
  pi = (double) count / n * 4;
@@ -65,6 +64,8 @@ int ADDX(int i, int s) // i = i + s
     	  if (ADDX <= i)  
     	  { 
     	    ADDX = i + s;
+
     	  }
+    	  
    	return (ADDX); 
 }//end int ADDX

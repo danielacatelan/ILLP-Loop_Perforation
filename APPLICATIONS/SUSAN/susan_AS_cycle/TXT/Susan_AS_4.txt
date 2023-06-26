@@ -1,7 +1,0 @@
-bbl loader
-
-Entra no loop = 32
-begin: 8783978
-end 30080188623
-Total Cycle: 6633573
-Number Corner = 441

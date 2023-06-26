@@ -1,9 +1,13 @@
-/* The Computer Language Benchmarks Game
- * http://benchmarksgame.alioth.debian.org/
- *
- * contributed by Christoph Bauer
- *  
- */
+/*##################################################
+****************************************
+Application: NBODY
+****************************************
+Technique: ILLP - Instruction-Level Loop Perforation
+*****************************************
+Date: 06/26/2023
+Author: Daniela L. Catelan
+UFMS - PhD in Computer Science
+####################################################*/
 
 #include <math.h>
 #include <stdio.h>
@@ -21,13 +25,22 @@ struct planet {
   double mass;
 };
 
-void advance(int nbodies, struct planet * bodies, double dt)
+void advance(int nbodies, struct planet * bodies, double dt)//HOT
 {
   int i, j;
 
-  for (i = 0; i < nbodies; i++) {
+    //Definição de variaveis
+  //==== LOOP PERFORATION ======================
+  int s, gp;
+  gp = 8;//grau perfuracao potencia 2(0,1,2,4,8)
+  s = pow(2,gp);//grau perfuracao potencia 2^gp
+  //=============================================
+
+  for (i = 0; i < nbodies; i=ADDX(i,s)) {//LP
     struct planet * b = &(bodies[i]);
-    for (j = i + 1; j < nbodies; j++) {
+    
+    for (j = i + 1; j < nbodies; j++) {//
+ 
       struct planet * b2 = &(bodies[j]);
       double dx = b->x - b2->x;
       double dy = b->y - b2->y;
@@ -42,6 +55,7 @@ void advance(int nbodies, struct planet * bodies, double dt)
       b2->vz += dz * b->mass * mag;
     }
   }
+
   for (i = 0; i < nbodies; i++) {
     struct planet * b = &(bodies[i]);
     b->x += dt * b->vx;
@@ -137,22 +151,16 @@ int main(int argc, char ** argv)
 
   offset_momentum(NBODIES, bodies);
   energy_om = energy(NBODIES, bodies);
-  //Definição de variaveis
-  //==== LOOP PERFORATION ======================
-  int s, gp;
-  gp = 8;//grau perfuracao potencia 2(0,1,2,4,8)
-  s = pow(2,gp);//grau perfuracao potencia 2^gp
-  //=============================================
-  //for (i = 1; i <= n; i++)//LOOP PERFORATION
-  for (i = 1; i <= n; i=ADDX(i,s))
+
+  for (i = 1; i <= n; i++)//LOOP PERFORATION
   {
     advance(NBODIES, bodies, 0.01);
-
+    
   }  
   energy_a = energy(NBODIES, bodies);
 
   printf ("%.9f\n", energy_om);
-  printf ("%.9f\n", energy_a);
+  printf ("%.9f\n", energy_a); //PEGA ESSA SAIDA
   return 0;
 }
 
@@ -170,7 +178,9 @@ int ADDX(int i, int s) // i = i + s
     	  if (ADDX <= i)  
     	  { 
     	    ADDX = i + s;
+
     	  }
+ 
    	return (ADDX); 
 }//end int ADDX
 

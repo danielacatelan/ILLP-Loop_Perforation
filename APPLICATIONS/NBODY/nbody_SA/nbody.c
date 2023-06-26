@@ -1,9 +1,14 @@
-/* The Computer Language Benchmarks Game
- * http://benchmarksgame.alioth.debian.org/
- *
- * contributed by Christoph Bauer
- *  
- */
+/*##################################################
+****************************************
+Application: NBODY
+****************************************
+Technique: AS - ACCEPT-SPIKEX
+*****************************************
+Date: 06/26/2023
+Author: Daniela L. Catelan
+UFMS - PhD in Computer Science
+####################################################*/
+
 #include <enerc.h>
 #include <math.h>
 #include <stdio.h>
@@ -13,19 +18,23 @@
 #define solar_mass (4 * pi * pi)
 #define days_per_year 365.24
 
+
 struct planet {
   double x, y, z;
   double vx, vy, vz;
   double mass;
 };
 
-void advance(int nbodies, struct planet * bodies, double dt)
+void advance(int nbodies, struct planet * bodies, double dt)//HOT
 {
   int i, j;
 
-  for (i = 0; i < nbodies; i++) {
+  
+  for (i = 0; i < nbodies; i++) {//5x1000 LP
+    //LP++;
     struct planet * b = &(bodies[i]);
-    for (j = i + 1; j < nbodies; j++) {
+    for (j = i + 1; j < nbodies; j++) {//LP_HOT 5x5x1000
+     
       struct planet * b2 = &(bodies[j]);
       double dx = b->x - b2->x;
       double dy = b->y - b2->y;
@@ -39,20 +48,25 @@ void advance(int nbodies, struct planet * bodies, double dt)
       b2->vy += dy * b->mass * mag;
       b2->vz += dz * b->mass * mag;
     }
+
   }
-  for (i = 0; i < nbodies; i++) {
+
+  
+//erra muito e dá mesmo valor
+  for (i = 0; i < nbodies; i++) {//5x
     struct planet * b = &(bodies[i]);
     b->x += dt * b->vx;
     b->y += dt * b->vy;
     b->z += dt * b->vz;
   }
+
 }
 
 double energy(int nbodies, struct planet * bodies)
 {
   double e;
   int i, j;
-
+ 
   e = 0.0;
   for (i = 0; i < nbodies; i++) {
     struct planet * b = &(bodies[i]);
@@ -128,21 +142,22 @@ struct planet bodies[NBODIES] = {
 
 int main(int argc, char ** argv)
 {
-  int n=1000 ;//= atoi(param);
-  //scanf("%d", &n);
+  int n=1000 ;
   int i;
   double energy_om, energy_a;
 
   offset_momentum(NBODIES, bodies);
   energy_om = energy(NBODIES, bodies);
+  
   for (i = 1; i <= n; i++)//LOOP PERFORATION
   {
     advance(NBODIES, bodies, 0.01);
   }  
+  
   energy_a = energy(NBODIES, bodies);
 
-  printf ("%.9f\n", energy_om);
-  printf ("%.9f\n", energy_a);
+  printf ("\n%.9f\n", energy_om);
+  printf ("\n%.9f\n", energy_a);//PEGA ESSA SAIDA
   return 0;
 }
 

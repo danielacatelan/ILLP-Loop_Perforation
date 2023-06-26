@@ -18,6 +18,7 @@ main:                                   # @main
 	sw	s6, 16(sp)
 	sw	s7, 12(sp)
 	sw	s8, 8(sp)
+	sw	s9, 4(sp)
 	.cfi_offset ra, -4
 	.cfi_offset s0, -8
 	.cfi_offset s1, -12
@@ -28,15 +29,17 @@ main:                                   # @main
 	.cfi_offset s6, -32
 	.cfi_offset s7, -36
 	.cfi_offset s8, -40
+	.cfi_offset s9, -44
 	addi	a0, zero, 1
 	call	srand
 	mv	s1, zero
 	mv	s0, zero
+	mv	s4, zero
 	mv	s2, zero
 	lui	a0, 269824
 	addi	s3, a0, -1
 	lui	a0, 1
-	addi	s8, a0, -1096
+	addi	s9, a0, -1096
 	j	.LBB0_2
 .LBB0_1:                                # %for.inc
                                         #   in Loop: Header=BB0_2 Depth=1
@@ -44,7 +47,7 @@ main:                                   # @main
 	sltu	a1, a0, s1
 	add	s0, s0, a1
 	mv	s1, a0
-	beq	a0, s8, .LBB0_5
+	beq	a0, s9, .LBB0_4
 .LBB0_2:                                # %accept_cond
                                         # =>This Inner Loop Header: Depth=1
 	andi	a0, s1, 3
@@ -56,42 +59,41 @@ main:                                   # @main
 	lui	a2, 1047552
 	mv	a3, s3
 	call	__divdf3
-	mv	s4, a0
-	mv	s5, a1
+	mv	s5, a0
+	mv	s6, a1
 	call	rand
 	call	__floatsidf
 	lui	a2, 1047552
 	mv	a3, s3
 	call	__divdf3
-	mv	s6, a0
-	mv	s7, a1
-	mv	a0, s4
-	mv	a1, s5
-	mv	a2, s4
-	mv	a3, s5
+	mv	s7, a0
+	mv	s8, a1
+	mv	a0, s5
+	mv	a1, s6
+	mv	a2, s5
+	mv	a3, s6
 	call	__muldf3
-	mv	s4, a0
-	mv	s5, a1
-	mv	a0, s6
-	mv	a1, s7
-	mv	a2, s6
-	mv	a3, s7
+	mv	s5, a0
+	mv	s6, a1
+	mv	a0, s7
+	mv	a1, s8
+	mv	a2, s7
+	mv	a3, s8
 	call	__muldf3
 	mv	a2, a0
 	mv	a3, a1
-	mv	a0, s4
-	mv	a1, s5
+	mv	a0, s5
+	mv	a1, s6
 	call	__adddf3
 	lui	a3, 261888
 	mv	a2, zero
 	call	__ledf2
-	bgtz	a0, .LBB0_1
-# %bb.4:                                # %if.then
-                                        #   in Loop: Header=BB0_2 Depth=1
+	slti	a0, a0, 1
+	add	s4, a0, s4
 	addi	s2, s2, 1
 	j	.LBB0_1
-.LBB0_5:                                # %for.end
-	mv	a0, s2
+.LBB0_4:                                # %for.end
+	mv	a0, s4
 	call	__floatsidf
 	lui	a3, 264823
 	mv	a2, zero
@@ -104,7 +106,12 @@ main:                                   # @main
 	addi	a0, a0, %lo(.L.str)
 	mv	a3, a1
 	call	printf
+	lui	a0, %hi(.L.str1)
+	addi	a0, a0, %lo(.L.str1)
+	mv	a1, s2
+	call	printf
 	mv	a0, zero
+	lw	s9, 4(sp)
 	lw	s8, 8(sp)
 	lw	s7, 12(sp)
 	lw	s6, 16(sp)
@@ -217,14 +224,14 @@ accept_roi_end:                         # @accept_roi_end
 	call	__subdf3
 	mv	s2, a0
 	mv	s1, a1
-	lui	a0, %hi(.L.str1)
-	addi	a0, a0, %lo(.L.str1)
-	lui	a1, %hi(.L.str12)
-	addi	a1, a1, %lo(.L.str12)
+	lui	a0, %hi(.L.str2)
+	addi	a0, a0, %lo(.L.str2)
+	lui	a1, %hi(.L.str13)
+	addi	a1, a1, %lo(.L.str13)
 	call	fopen
 	mv	s0, a0
-	lui	a0, %hi(.L.str2)
-	addi	a1, a0, %lo(.L.str2)
+	lui	a0, %hi(.L.str24)
+	addi	a1, a0, %lo(.L.str24)
 	mv	a0, s0
 	mv	a2, s2
 	mv	a3, s1
@@ -4438,8 +4445,13 @@ fastertanfull:                          # @fastertanfull
 	.type	.L.str,@object          # @.str
 	.section	.rodata.str1.1,"aMS",@progbits,1
 .L.str:
-	.asciz	"\n-> pi=%.5g"
-	.size	.L.str, 12
+	.asciz	"\n-> pi = %.5g"
+	.size	.L.str, 14
+
+	.type	.L.str1,@object         # @.str1
+.L.str1:
+	.asciz	"\n-> count1 = %i\n"
+	.size	.L.str1, 17
 
 	.type	time_begin,@object      # @time_begin
 	.section	.sbss,"aw",@nobits
@@ -4448,20 +4460,20 @@ time_begin:
 	.quad	0                       # double 0
 	.size	time_begin, 8
 
-	.type	.L.str1,@object         # @.str1
-	.section	.rodata.str1.1,"aMS",@progbits,1
-.L.str1:
-	.asciz	"accept_time.txt"
-	.size	.L.str1, 16
-
-	.type	.L.str12,@object        # @.str12
-.L.str12:
-	.asciz	"w"
-	.size	.L.str12, 2
-
 	.type	.L.str2,@object         # @.str2
+	.section	.rodata.str1.1,"aMS",@progbits,1
 .L.str2:
+	.asciz	"accept_time.txt"
+	.size	.L.str2, 16
+
+	.type	.L.str13,@object        # @.str13
+.L.str13:
+	.asciz	"w"
+	.size	.L.str13, 2
+
+	.type	.L.str24,@object        # @.str24
+.L.str24:
 	.asciz	"%f\n"
-	.size	.L.str2, 4
+	.size	.L.str24, 4
 
 	.section	".note.GNU-stack","",@progbits

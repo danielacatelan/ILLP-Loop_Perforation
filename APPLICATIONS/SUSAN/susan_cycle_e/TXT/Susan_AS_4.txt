@@ -1,9 +1,0 @@
-bbl loader
-
-Entra no loop = 32
-Total Cycle: 6633658
-Number Corner = 441
-
-real	0m1,129s
-user	0m1,073s
-sys	0m0,023s

@@ -15,20 +15,3 @@ main
 0
 0
 
-advance
-0
-0
-0
-
-energy
-0
-0
-
-offset_momentum
-0
-0
-
-main
-0
-0
-
