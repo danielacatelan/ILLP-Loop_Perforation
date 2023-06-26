@@ -1,0 +1,50 @@
+#####################################################################
+Author: Daniela Luiza Catelan
+Professor at Federal University of Mato Grosso do Sul
+#####################################################################
+
+***********************************************************************
+INSTALL: SPIKE SIMULATOR
+https://github.com/riscv-software-src/riscv-isa-sim
+***********************************************************************
+
+1 -> riscv-gnu-toolchain
+OBS: riscv-gnu-toolchain must be installed
+export PATH=$PATH:/opt/riscv/bin
+
+2 -> SPIKE (build steps)
+$ git clone https://github.com/riscv-software-src/riscv-isa-sim.git 
+$ cd riscv-isa-sim
+$ sudo apt-get install device-tree-compiler
+$ mkdir build && cd build
+
+$ ../configure --prefix=/opt/riscv --enable-histogram
+$ make
+$ sudo make install
+TEST: /opt/riscv/bin/spike 
+
+3 -> riscv-pk
+$ git clone https://github.com/riscv/riscv-pk.git 
+$ cd riscv-pk 
+$ mkdir build && cd build
+$ cd build
+$ ../configure --prefix=/opt/riscv  --host=riscv32-unknown-elf 
+$ make
+$ sudo make install
+TEST: /opt/riscv/bin/spike pk
+
+-> RUN
+file a.c
+
+#include <stdio.h>
+int main(void)
+{
+    printf("\n HELLO RISCV\n");
+    return(0);
+}
+
+riscv32-unknown-elf-gcc -o a a.c
+axpike --isa=RV32I /opt/riscv/riscv32-unknown-elf/bin/pk a
+
+
+

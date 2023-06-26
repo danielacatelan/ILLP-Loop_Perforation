@@ -1,0 +1,54 @@
+
+#####################################################################
+Author: Daniela Luiza Catelan
+Professor at Federal University of Mato Grosso do Sul
+#####################################################################
+
+***********************************************************************
+INSTALL RISCV-GNU-TOOLCHAIN
+***********************************************************************
+
+===========================================================
+1: RISCV-GNU-TOOLCHAIN
+===========================================================
+sudo apt-get install autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev git
+
+git clone https://github.com/riscv/riscv-gnu-toolchain
+
+cd riscv-gnu-toolchain
+
+./configure --prefix=/opt/riscv --with-arch=rv32i --with-abi=ilp32
+
+ sudo make
+
+ cd ..
+
+===========================================================
+2: RISCV-GCC-PREBUILT
+===========================================================
+$ wget https://github.com/stnolting/riscv-gcc-prebuilt/releases/tag/rv32i-4.0.0/riscv32-unknown-elf.gcc-12.1.0.tar.gz
+OU
+site: https://github.com/stnolting/riscv-gcc-prebuilt/releases
+
+$ sudo mkdir /opt/riscv
+
+->Se pegar no site entra em cd downloads
+$ cd Downloads
+->Continua daqui se usar o wget e depois de entrar na pasta downloads
+$ sudo tar -xzf riscv32-unknown-elf.gcc-12.1.0.tar.gz -C /opt/riscv/
+$ cd ..
+$ export PATH=$PATH:/opt/riscv/bin
+$ riscv32-unknown-elf-gcc -v
+$ ldd /opt/riscv32i/bin/riscv32-unknown-elf-gcc
+    linux-vdso.so.1
+    libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6
+    /lib64/ld-linux-x86-64.so.2
+
+$ export PATH=$PATH:/opt/riscv/bin
+
+
+
+
+
+
+

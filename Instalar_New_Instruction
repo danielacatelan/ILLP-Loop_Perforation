@@ -1,0 +1,191 @@
+***********************************************************************
+ADD A NEW INSTRUCTION IN RISCV-TOOLCHAIN AND SPIKE
+***********************************************************************
+OBS: riscv-gnu-toolchain must be installed
+
+export PATH=$PATH:/opt/riscv/bin
+
+===========================================================
+1: DOWNLOADS TOOLS
+===========================================================
+1.1 SPIKE
+git clone https://github.com/riscv-software-src/riscv-isa-sim.git
+
+1.2 RISCV-OPCODES
+git clone https://github.com/riscv/riscv-opcodes.git
+Download. Copy the contents into the riscv-opcodes folder (I replaced the existing encoding.h file)
+https://github.com/riscv/riscv-opcodes/tree/7c3db437d8d3b6961f8eb2931792eaea1c469ff3
+
+1.3 RISCV-OPENOCD
+git clone https://github.com/riscv/riscv-openocd.git
+
+1.4 RISCV-PK
+git clone https://github.com/riscv-software-src/riscv-pk.git
+
+1.5 RISCV-TESTS
+git clone https://github.com/riscv-software-src/riscv-tests.git
+
+1.6 RISCV-FESVR
+git clone https://github.com/riscvarchive/riscv-fesvr.git
+===========================================================
+2: INSTALL TOOLS (in this order)
+===========================================================
+2.1 riscv-fersv
+	cd riscv-fesvr
+	mkdir build && cd build
+	../configure --prefix=/opt/riscv
+	sudo make install
+	cd ../..
+2.2 riscv-pk
+	cd riscv-pk
+	mkdir build && cd build
+	../configure --prefix=/opt/riscv --host=riscv32-unknown-elf
+	make
+	sudo make install
+	cd ../..
+2.3 riscv-isa-sim (SPIKE)
+	cd riscv-isa-sim
+	sudo apt-get install device-tree-compiler
+	mkdir build && cd build
+	../configure --prefix=/opt/riscv 
+	make
+	sudo make install
+===========================================================
+3. ADD NEW INSTRUCTION (RISCV-GNU-TOOLCHAIN
+===========================================================
+3.1 Enter the directory riscv-opcodes and edit opcodes (riscv-opcodes/opcodes)
+addx    rd rs1 rs2 31..25=1  14..12=0 6..2=0x0A 1..0=3
+subx    rd rs1 rs2 31..25=1  14..12=0 6..2=0x0B 1..0=3
+mod     rd rs1 rs2 31..25=1  14..12=0 6..2=0x1A 1..0=3
+
+
+
+
+cd riscv-opcodes
+cat /home/dani/riscv-opcodes/opcodes | /home/dani/riscv-opcodes/parse-opcodes -c > /home/dani/riscv-opcodes/instructionInfo.h
+
+open the instructionInfo.h file and check the lines:
+
+#define MATCH_ADDX 0x200002b
+#define MASK_ADDX  0xfe00707f
+#define MATCH_SUBX 0x200002f
+#define MASK_SUBX  0xfe00707f
+#define MATCH_MOD 0x200006b
+#define MASK_MOD  0xfe00707f
+...
+DECLARE_INSN(addx, MATCH_ADDX, MASK_ADDX)
+DECLARE_INSN(subx, MATCH_SUBX, MASK_SUBX)
+DECLARE_INSN(mod, MATCH_MOD, MASK_MOD)
+
+make install
+
+3.2 Add in:
+riscv-gnu-toolchain/riscv-gdb/include/opcode/riscv-opc.h
+riscv-gnu-toolchain/riscv-binutils/include/opcode/riscv-opc.h
+
+#define MATCH_ADDX 0x200002b
+#define MASK_ADDX  0xfe00707f
+#define MATCH_SUBX 0x200002f
+#define MASK_SUBX  0xfe00707f
+#define MATCH_MOD 0x200006b
+#define MASK_MOD  0xfe00707f
+...
+DECLARE_INSN(addx, MATCH_ADDX, MASK_ADDX)
+DECLARE_INSN(subx, MATCH_SUBX, MASK_SUBX)
+DECLARE_INSN(mod, MATCH_MOD, MASK_MOD)
+
+
+3.3 Add in
+riscv-gnu-toolchain/riscv-gdb/opcodes/riscv-opc.c
+riscv-gnu-toolchain/riscv-binutils/opcodes/riscv-opc.c
+
+{"addx",	 0, INSN_CLASS_I, "d,s,t", MATCH_ADDX, MASK_ADDX, match_opcode, 0},
+{"subx",	 0, INSN_CLASS_I, "d,s,t", MATCH_SUBX, MASK_SUBX, match_opcode, 0},
+{"mod",	 0, INSN_CLASS_I, "d,s,t", MATCH_MOD, MASK_MOD, match_opcode, 0},
+
+===========================================================
+4. REBUILD RISCV-GNU-TOOLCHAIN
+===========================================================
+cd riscv-gnu-toolchain
+make clean
+./configure --prefix=/opt/riscv --with-arch=rv32i --with-abi=ilp32
+sudo make
+
+===========================================================
+5. TEST RISCV-GNU-TOOLCHAIN
+===========================================================
+cd test/addx.c
+#include <stdio.h>
+int main(){
+  int a,b,addx, subx, mod;
+  a = 5;
+  b = 2;
+  asm volatile
+  (
+    "addx   %[z], %[x], %[y]\n\t"
+    : [z] "=r" (addx)
+    : [x] "r" (a), [y] "r" (b)
+   );
+  asm volatile
+  ( 
+    "subx   %[z], %[x], %[y]\n\t"
+    : [z] "=r" (subx)
+    : [x] "r" (a), [y] "r" (b)
+  );
+  asm volatile
+  (
+    "mod   %[z], %[x], %[y]\n\t"
+    : [z] "=r" (mod)
+    : [x] "r" (a), [y] "r" (b)
+  );  
+  printf("ADDX => 5+2=%d\n",addx);
+  printf("SUBX => 5-2=%d\n",subx);
+  printf("MOD => 5mod2=%d\n",mod);
+  return 0;
+}
+
+riscv32-unknown-elf-gcc addx.c -O1 -march=rv32im -o addx
+riscv32-unknown-elf-objdump -dC addx > addx.dump
+
+===========================================================
+6. BUILD NEW INSTRUCTION SPIKE
+===========================================================
+6.1 In the riscv-isa-sim/riscv/encoding.h add the following lines:
+#define MATCH_ADDX 0x200002b
+#define MASK_ADDX  0xfe00707f
+#define MATCH_SUBX 0x200002f
+#define MASK_SUBX  0xfe00707f
+#define MATCH_MOD 0x200006b
+#define MASK_MOD  0xfe00707f
+...
+DECLARE_INSN(addx, MATCH_ADDX, MASK_ADDX)
+DECLARE_INSN(subx, MATCH_SUBX, MASK_SUBX)
+DECLARE_INSN(mod, MATCH_MOD, MASK_MOD)
+
+6.2 Create a file riscv-isa-sim/riscv/insns/addx.h subx.h mod.h and add these lines:
+WRITE_RD(sext_xlen(RS1 % RS2)); //MOD (under development)
+WRITE_RD(sext_xlen(RS1 ^ RS2 ^ 00000000000000000000000000000000)); //ADDX - OK
+WRITE_RD(sext_xlen(RS1 - RS2)); //SUBX (under development)
+
+6.3 Add this file to riscv-isa-sim/riscv/riscv.mk.in
+riscv_insn_ext_i = \
+      ...
+      mod \
+      addx \
+      subx \
+      ...
+      
+6.5 Rebuild spike/build
+cd riscv-isa-sim/build
+sudo make install
+
+6.6 Test Spike
+spike --isa=RV32I /opt/riscv/riscv32-unknown-elf/bin/pk addx
+
+===========================================================
+For new example:
+export PATH=$PATH:/opt/riscv/bin
+riscv32-unknown-elf-gcc test.c -O1 -march=rv32im -o test
+riscv32-unknown-elf-objdump -dC test > test.dump
+spike --isa=RV32I /opt/riscv/riscv32-unknown-elf/bin/pk test
+===========================================================
