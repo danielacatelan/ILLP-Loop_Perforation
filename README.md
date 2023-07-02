@@ -1,21 +1,7 @@
-# ILLP-Loop_Perforation
-Instruction Level Loop Perforation
+## ILLP-Loop_Perforation
+ **Abstract:** Instruction Level Loop Perforation
 
-The use of approximate computing (AC) has drawn the attention of software and processor designers by offering techniques ranging from the application level to the circuit level. CA techniques offer application acceleration, power dissipation savings and reduced memory consumption at the cost of inaccurate results.
-
-A widely known AC technique is loop piercing (LP), which aims to reduce the amount of computational work by skipping loop iterations.
-
-This project introduces an instruction-level loop piercing (ILLP) approach that relies on approximate hardware instructions.
-
-The procedure addresses the tradeoff between accuracy and physical efficiency when using the loop drilling technique with a rough increment.
-
-We've extended the ACCEPT compiler and SPIKE simulator workflows to generate and simulate applications with ILLP.
-
-From a set of ten general-purpose applications, we evaluated the technique by comparing results for accuracy, number of instructions, execution time, and cycles with baseline code (no approximation optimizations) and compiler loop drilling. ACCEPT.
-
-Our technique (ILLP) achieves a reduction of $27.35$\% in the number of instructions for the DIJKSTRA application (perforation degree=$2$). Punching the loop in the ACCEPT compiler saw a $7.74\%$ increase in the number of instructions for DIJKSTRA applications as well. The ILLP saw a $15.16\%$ reduction in the number of cycles (drilling grade=$1$) for the FLOYD application.
-
-We provide the ten applications used in this project, separated by folders for each application. Each application presents source files for simulation with ILLP and AS.
+  > The use of approximate computing (AC) has drawn the attention of software and processor designers by offering techniques ranging from the application level to the circuit level. AC techniques offer application acceleration, energy savings, and a reduced memory footprint at the cost of inaccurate results. A widely used AC technique is loop perforation (LP), which aims to reduce computational work by skipping loop iterations. This paper presents an Instruction-Level Loop Perforation (ILLP) approach that relies on approximate hardware instructions. The procedure addresses the trade-off between accuracy and physical efficiency when using the loop perforation technique with a rough increment. We have extended the ACCEPT compiler and SPIKE simulator workflows to generate and simulate applications with ILLP. From a set of thirteen general-purpose applications, we evaluated the technique by comparing the results of accuracy, number of instructions, number of cycles, and energy consumption, with a baseline code (no approximations in the code) and the loop perforation from the ACCEPT compiler. We adopted Prof5, a RISC-V profiler tool, to collect application performance information. Our technique, ILLP, achieves a 74.61$% reduction in the number of instructions for the PI application, a 51.40% reduction in the number of cycles for the FFT application, and 74.49% energy savings for the PI application. Compared to the ACCEPT technique, our technique achieved a runtime cycle improvement of up to 46.67$%.
 
 For contact:
 Daniela Luiza Catelan
